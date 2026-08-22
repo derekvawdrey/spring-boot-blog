@@ -1,10 +1,21 @@
 package com.derekvawdrey.blog.post;
 
+import com.derekvawdrey.blog.user.User;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name="post")
 public class Post {
 
+    @Id
+    @GeneratedValue
     private Long id;
-    private Long authorId;
+
+    // todo: Revisit the cascade type, I want soft deletes, not hard deletes
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User author;
+
     private String title;
     private String body;
 
@@ -13,8 +24,8 @@ public class Post {
         return this.id;
     }
 
-    public Long getAuthorId() {
-        return this.authorId;
+    public User getAuthor() {
+        return this.author;
     }
 
     public String getTitle() {

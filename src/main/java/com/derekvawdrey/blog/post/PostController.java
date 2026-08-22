@@ -22,7 +22,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDTO> getAllPosts() {
-
+    public void getAllPosts() {
+        
     }
 }
