@@ -1,5 +1,6 @@
 package com.derekvawdrey.blog.post;
 
+import com.derekvawdrey.blog.common.Slug;
 import com.derekvawdrey.blog.user.User;
 import jakarta.persistence.*;
 
@@ -11,13 +12,26 @@ public class Post {
     @GeneratedValue
     private Long id;
 
-    // todo: Revisit the cascade type, I want soft deletes, not hard deletes
-    @ManyToOne(cascade = CascadeType.ALL)
+    // todo: Add soft deletes (e.g. a deleted flag + default filter) instead of hard deletes
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
 
     private String title;
     private String body;
+
+    @Column(nullable = false, unique = true)
+    private String slug;
+
+    @PrePersist
+    void ensureSlug() {
+        if (this.slug == null && this.title != null) {
+            String generated = Slug.from(this.title);
+            if (!generated.isEmpty()) {
+                this.slug = generated;
+            }
+        }
+    }
 
     // Getters and setters
     public Long getId() {
@@ -46,6 +60,14 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getSlug() {
+        return this.slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
 

@@ -1,10 +1,10 @@
 package com.derekvawdrey.blog.user;
 
-import java.util.List;
-import java.util.stream.StreamSupport;
-
+import com.derekvawdrey.blog.common.PageResponse;
 import com.derekvawdrey.blog.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,9 +17,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserDTO> getAllUsers() {
-        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-                .map(UserDTO::from)
-                .toList();
+    public PageResponse<UserDTO> getUsers(int page, int size) {
+        Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+        return PageResponse.from(users, UserDTO::from);
     }
 }

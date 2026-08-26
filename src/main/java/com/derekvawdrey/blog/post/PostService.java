@@ -1,11 +1,13 @@
 package com.derekvawdrey.blog.post;
 
-import java.util.List;
-import java.util.stream.StreamSupport;
-
+import com.derekvawdrey.blog.common.PageResponse;
 import com.derekvawdrey.blog.post.dto.PostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class PostService {
@@ -17,9 +19,14 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public List<PostDTO> getAllPosts() {
-        return StreamSupport.stream(postRepository.findAll().spliterator(), false)
+    public PageResponse<PostDTO> getPosts(int page, int size) {
+        Page<Post> posts = postRepository.findAll(PageRequest.of(page, size));
+        return PageResponse.from(posts, PostDTO::from);
+    }
+
+    public PostDTO getPostBySlug(String slug) {
+        return postRepository.findBySlug(slug)
                 .map(PostDTO::from)
-                .toList();
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found: " + slug));
     }
 }
