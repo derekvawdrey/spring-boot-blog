@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Post {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // todo: Add soft deletes (e.g. a deleted flag + default filter) instead of hard deletes
