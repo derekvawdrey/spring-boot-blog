@@ -1,6 +1,10 @@
 package com.derekvawdrey.blog.user;
 
+import java.util.List;
+
+import com.derekvawdrey.blog.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,4 +19,8 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers();
+    }
 }

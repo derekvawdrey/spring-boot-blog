@@ -28,6 +28,10 @@ public class Post {
         return this.author;
     }
 
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public String getTitle() {
         return this.title;
     }
