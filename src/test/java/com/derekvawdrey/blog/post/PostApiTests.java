@@ -90,6 +90,17 @@ class PostApiTests {
     }
 
     @Test
+    void searchReturnsResults() throws Exception {
+        Post post = new Post();
+        post.setTitle("Searchable title");
+        post.setBody("body");
+        postRepository.save(post);
+
+        mockMvc.perform(get("/v1/posts/search").param("q", "Searchable").param("page", "1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void getPostBySlugReturns404WhenMissing() throws Exception {
         mockMvc.perform(get("/v1/posts/does-not-exist"))
                 .andExpect(status().isNotFound());

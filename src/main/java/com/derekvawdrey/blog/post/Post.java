@@ -23,6 +23,9 @@ public class Post {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    @Column(nullable = false)
+    private boolean published = false;
+
     @PrePersist
     void ensureSlug() {
         if (this.slug == null && this.title != null) {
@@ -68,6 +71,14 @@ public class Post {
 
     public void setSlug(String slug) {
         this.slug = slug;
+    }
+
+    public boolean isPublished() {
+        return this.published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
 
